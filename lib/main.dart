@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noteapp/DATA/LOCAL/database.dart';
+import 'package:noteapp/home.dart';
 void main(){
   runApp(_materialApp());
 }
@@ -12,10 +13,13 @@ class _materialApp extends  StatefulWidget
 
 class _materialState extends State<_materialApp>
 {
-
   @override
   Widget build(BuildContext context)
   {
-    return
+    return MaterialApp(
+      theme: ThemeData.dark(),
+      debugShowCheckedModeBanner: false,
+      home: home(),
+    );
   }
 }

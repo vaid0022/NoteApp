@@ -27,7 +27,7 @@ class db {
   }
 
   Future<Database> opendb() async {
-    Directory dir = await getApplicationCacheDirectory();
+    Directory dir = await getApplicationDocumentsDirectory();
 
     String dbpath = join(dir.path, "notedb.db");
     return await openDatabase(
@@ -35,10 +35,10 @@ class db {
       onCreate: (db, version) {
         //create Tables
         db.execute('''
-        create $TableNote (
+        create table $TableNote (
          $S_No integer primary key autoincrement,
          $Title text,
-         $Description text
+         $Description text)
         ''');
       },
       version: 1,
@@ -62,12 +62,16 @@ class db {
     return mdata;
   }
 
-  Future<bool> update({required String uTitle, required String uDec}) async {
+  Future<bool> update({required int s_no,required String uTitle, required String uDec}) async {
     var db = await getdb();
     int rowupdated = await db.update(TableNote, {
       Title: uTitle,
       Description: uDec,
-    });
+    },where: "$S_No=?",whereArgs: [s_no] );
     return rowupdated > 0;
+  } Future<bool>delete({required int id}) async {
+    var db = await getdb();
+    int rowdeleted = await db.delete(TableNote,where: "$S_No=?",whereArgs: [id]);
+    return rowdeleted > 0;
   }
 }
