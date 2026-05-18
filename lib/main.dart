@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:noteapp/DATA/LOCAL/database.dart';
 import 'package:noteapp/home.dart';
+import 'package:noteapp/providers.dart';
+import 'package:noteapp/splashScreen.dart';
+import 'package:provider/provider.dart';
 void main(){
-  runApp(_materialApp());
+  runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_)=>databaseprovier(),),
+          ChangeNotifierProvider(create: (_)=>themeProvider())
+        ],
+          child:_materialApp()
+      ),);
 }
 
 class _materialApp extends  StatefulWidget
@@ -17,9 +27,19 @@ class _materialState extends State<_materialApp>
   Widget build(BuildContext context)
   {
     return MaterialApp(
-      theme: ThemeData.dark(),
-      debugShowCheckedModeBanner: false,
-      home: home(),
+        debugShowCheckedModeBanner: false,
+
+      themeMode: Provider.of<themeProvider>(context).getThemeMode()?ThemeMode.dark:ThemeMode.light,
+        theme: ThemeData(
+          brightness: Brightness.light,
+          textTheme: TextTheme(
+            bodyMedium: TextStyle(color: Colors.black)
+          )
+        ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark
+      ),
+      home:SplashScreen(),
     );
   }
 }

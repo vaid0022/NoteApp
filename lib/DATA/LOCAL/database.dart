@@ -1,77 +1,75 @@
 import 'dart:io';
-import 'package:path_provider/path_provider.dart';
+
+import 'package:noteapp/DATA/LOCAL/datamanagement.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-class db {
-  //Singlonton -for createing only one instance(object)
-  db._(); //constructor privataisazion
-  static final String TableNote = "note";
-  static final String S_No = "sno";
-  static final String Title = "title";
-  static final String Description = "discription";
+class db{
+  db._();
+  static db getIstance=db._();
 
-  static final db getInstaance = db
-      ._(); //static is use at compile time, Now you can call only this Fun and cant create clone of same function
+  String TableNote="tablenote";
+  String Note_No="noteno";
+  String Note_Title="titlenote";
+  String Note_Descreption="noteDescription";
 
   Database? mydb;
 
-  //db open -(pat->if exists than open else create
-  Future<Database> getdb() async {
-    if (mydb != null) {
-      return mydb!;
-    } else {
-      mydb = await opendb();
-      return await mydb!;
-    }
+  Future<Database> getdb()async
+  {
+    if(mydb!=null)
+      {
+        return mydb!;
+      }
+    else
+      {
+        mydb =await opendb();
+        return  mydb!;
+      }
   }
 
-  Future<Database> opendb() async {
-    Directory dir = await getApplicationDocumentsDirectory();
+  Future<Database> opendb() async
+  {
+    Directory Dir=await getApplicationDocumentsDirectory();
 
-    String dbpath = join(dir.path, "notedb.db");
+    String dbpath=join(Dir.path,"Note.db");
+
     return await openDatabase(
       dbpath,
-      onCreate: (db, version) {
-        //create Tables
-        db.execute('''
-        create table $TableNote (
-         $S_No integer primary key autoincrement,
-         $Title text,
-         $Description text)
-        ''');
-      },
-      version: 1,
-    ); //version is use for change schema
+    onCreate: (db,version)async{
+        await db.execute(""" 
+        create table $TableNote(
+        $Note_No integer primary key autoincrement,
+        $Note_Title text,
+        $Note_Descreption text
+       );
+        """);
+    },version: 1,
+    );
+  }
+  Future<List<Map<String,dynamic>>> getAllNotes()async
+  {
+    var db=await getdb();
+   List<Map<String,dynamic>> mydata=await db.query(TableNote);
+    return  mydata;
+  }
+  Future<void> addNote(addModel note)async{
+    var db=await getdb();
+    await db.insert(TableNote,note.map(),
+     );
   }
 
-  //all queries
-  //insertaion
-  Future<bool> addNote({required String mTitle, required String mdec}) async {
-    var db = await getdb();
-    int roweffected = await db.insert(TableNote, {
-      Title: mTitle,
-      Description: mdec,
-    });
-    return roweffected > 0;
+  Future<void> updateNote(updateModel note)
+  async{
+    var db= await getdb();
+
+    db.update(TableNote,note.map(),where: "$Note_No=?",whereArgs:[note.Note_no] );
   }
 
-  Future<List<Map<String, dynamic>>> getAllNote() async {
-    var db = await getdb();
-    List<Map<String, dynamic>> mdata = await db.query(TableNote);
-    return mdata;
-  }
+  Future<void> DeleteNote(DeleteModel note) async{
 
-  Future<bool> update({required int s_no,required String uTitle, required String uDec}) async {
-    var db = await getdb();
-    int rowupdated = await db.update(TableNote, {
-      Title: uTitle,
-      Description: uDec,
-    },where: "$S_No=?",whereArgs: [s_no] );
-    return rowupdated > 0;
-  } Future<bool>delete({required int id}) async {
-    var db = await getdb();
-    int rowdeleted = await db.delete(TableNote,where: "$S_No=?",whereArgs: [id]);
-    return rowdeleted > 0;
+    var db=await getdb();
+    db.delete(TableNote,where: "$Note_No=?",whereArgs: [note.Note_no]);
   }
 }
