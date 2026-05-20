@@ -9,6 +9,8 @@ class modifyNote extends StatefulWidget {
   Map<String,dynamic>?noteno;
 
   modifyNote({required this.isUpdate,this.noteno});
+
+
   @override
   State<modifyNote> createState() => modifyState();
 }
@@ -16,7 +18,17 @@ class modifyNote extends StatefulWidget {
 class modifyState extends State<modifyNote> {
   var noteTitle = TextEditingController();
   var noteDescription = TextEditingController();
+
   @override
+  void initState(){
+    super.initState();
+
+    if(widget.isUpdate == true && widget.noteno != null)
+      {
+        noteTitle.text=widget.noteno!['titlenote'];
+        noteDescription.text=widget.noteno!['noteDescription'];
+      }
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,

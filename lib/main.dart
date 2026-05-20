@@ -39,7 +39,8 @@ class _materialState extends State<_materialApp>
       darkTheme: ThemeData(
         brightness: Brightness.dark
       ),
-      home:SplashScreen(),
+      home:home()
+      //SplashScreen(),
     );
   }
 }

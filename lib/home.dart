@@ -35,7 +35,7 @@ class homeState extends State<home> {
 
     return Scaffold(
       appBar: AppBar(title: Text("Note")),
-
+      // ================= BODY =================
       drawer: Drawer(
         child: Container(
           decoration: BoxDecoration(
@@ -46,8 +46,9 @@ class homeState extends State<home> {
             fit: BoxFit.cover
             )
           ),
-          child: ListView(
-            children: [
+          child:
+              Column(
+                children: [
               DrawerHeader(child: Card(
                   elevation:1,
                   child: Center(child: Row(
@@ -87,23 +88,25 @@ class homeState extends State<home> {
                   ),
                 ),
               ),
-            ],
-          ),
+                  ]
+              )
+
         ),
       ),
-
+      // ================= Bo0mtdfdy =================
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
             image: Provider.of<themeProvider>(context).getThemeMode()
                 ? AssetImage('assets/theme_images/dark.jpg')
-                : AssetImage('assets/theme_images/white2.jpg'),
+                : AssetImage('assets/theme_images/white2.jpg') ,
             fit: BoxFit.cover,
           ),
         ),
         child: GridView.builder(
           itemCount: provoder.allnotes.length,
           itemBuilder: (context, index) {
+
             Map<String, dynamic> id = provoder.allnotes[index];
             return InkWell(
               onTap: () {
@@ -115,30 +118,29 @@ class homeState extends State<home> {
 
               child: ClipRRect(
                 borderRadius: BorderRadiusGeometry.circular(30),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                  child:
+                child:
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: .1),
+                          color: Colors.white.withValues(alpha: .4),
                           borderRadius: BorderRadius.circular(21),
                           border: Border.all(
-                            color: Colors.white.withValues(alpha: .2),
+                            color: Colors.white.withValues(alpha: .1),
                           ),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(20),
                           child: Stack(
                             children: [
-                              SingleChildScrollView(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     SizedBox(height: 40),
                                     Text(
                                       provoder.allnotes[index]['titlenote'],
-
+                                        maxLines:2 ,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 22,
                                         fontWeight: FontWeight.bold,
@@ -150,10 +152,11 @@ class homeState extends State<home> {
                                     Text(
                                       provoder
                                           .allnotes[index]['noteDescription'],
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 12,
                                     ),
                                   ],
                                 ),
-                              ),
                               Positioned(
                                 top: 0,
                                 right: 0,
@@ -204,7 +207,7 @@ class homeState extends State<home> {
                       ) ??
                       Text("NOTE is Empty"),
                 ),
-              ),
+
             );
           },
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -231,7 +234,7 @@ class homeState extends State<home> {
         child: Icon(Icons.add),
       ),
     );
-    
+
   }
 
   void getvalue() async {
