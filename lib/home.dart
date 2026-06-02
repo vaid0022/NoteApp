@@ -35,7 +35,7 @@ class homeState extends State<home> {
 
     return Scaffold(
       appBar: AppBar(title: Text("Note")),
-      // ================= BODY =================
+
       drawer: Drawer(
         child: Container(
           decoration: BoxDecoration(
@@ -93,7 +93,6 @@ class homeState extends State<home> {
 
         ),
       ),
-      // ================= Bo0mtdfdy =================
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(

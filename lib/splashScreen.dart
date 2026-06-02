@@ -24,6 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
           splash: Container(
 
             decoration: BoxDecoration(
+
                 image: DecorationImage(
                     image:AssetImage('assets/splash_screen_res/splash3.jpg'),
                     fit: BoxFit.cover
